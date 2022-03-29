@@ -613,9 +613,9 @@ class slot_conflict_handler:
                                 ii += 1 + len(token)
 
                             atom_str = (
-                                atom_str[:use_part_start]
-                                + "[%s]" % (",".join(new_tokens),)
-                                + atom_str[use_part_end + 1 :]
+                                f"{atom_str[:use_part_start]}"
+                                f"[{','.join(new_tokens)}]"
+                                f"{atom_str[use_part_end + 1 :]}"
                             )
 
                         return atom_str, colored_idx
@@ -639,15 +639,15 @@ class slot_conflict_handler:
                             use_display = ""
                         if atom.soname:
                             msg.append(
-                                "%s required by %s %s\n" % (atom, parent, use_display)
+                                f"{atom} required by {parent} {use_display}\n"
                             )
                         elif isinstance(parent, PackageArg):
                             # For PackageArg it's
                             # redundant to display the atom attribute.
-                            msg.append("%s\n" % (parent,))
+                            msg.append(f"{parent}\n")
                         elif isinstance(parent, AtomArg):
                             msg.append(2 * indent)
-                            msg.append("%s (Argument)\n" % (atom,))
+                            msg.append("{atom} (Argument)\n")
                         else:
                             # Display the specific atom from SetArg or
                             # Package types.
@@ -675,10 +675,9 @@ class slot_conflict_handler:
                             if version_violated or slot_violated:
                                 self.is_a_version_conflict = True
 
-                            cur_line = "%s required by %s %s\n" % (
-                                atom_str,
-                                parent,
-                                use_display,
+                            cur_line = (
+                                f"{atom_str} required by"
+                                f" {parent} {use_display}\n"
                             )
                             marker_line = ""
                             for ii in range(len(cur_line)):
@@ -695,7 +694,8 @@ class slot_conflict_handler:
                     if not selected_for_display:
                         msg.append(2 * indent)
                         msg.append(
-                            "(no parents that aren't satisfied by other packages in this slot)\n"
+                            f"(no parents that aren't satisfied by other"
+                            f" packages in this slot)\n"
                         )
                         self.conflict_is_unspecific = True
 
@@ -705,13 +705,13 @@ class slot_conflict_handler:
                         msg.append(2 * indent)
                         if len(selected_for_display) > 1:
                             msg.append(
-                                "(and %d more with the same problems)\n"
-                                % omitted_parents
+                                f"(and {omitted_parents} more with the same"
+                                f" problems)\n"
                             )
                         else:
                             msg.append(
-                                "(and %d more with the same problem)\n"
-                                % omitted_parents
+                                f"(and {omitted_parents} more with the same"
+                                f" problem)\n"
                             )
                 else:
                     msg.append(" (no parents)\n")
@@ -781,11 +781,11 @@ class slot_conflict_handler:
                     else:
                         changes.append(colorize("blue", "-" + flag))
                 mymsg += (
-                    indent
-                    + "- "
-                    + pkg.cpv
-                    + " (Change USE: %s" % " ".join(changes)
-                    + ")\n"
+                    f"{indent}"
+                    f"- "
+                    f"{pkg.cpv}"
+                    f" (Change USE: {" ".join(changes)}"
+                    f")\n"
                 )
             mymsg += "\n"
             return mymsg
@@ -827,10 +827,9 @@ class slot_conflict_handler:
                         if self.debug:
                             writemsg(
                                 (
-                                    "%s has pending USE changes. "
-                                    "Rejecting configuration.\n"
-                                )
-                                % (pkg,),
+                                    f"{pkg} has pending USE changes. "
+                                    f"Rejecting configuration.\n"
+                                ),
                                 noiselevel=-1,
                             )
                         return False
@@ -860,10 +859,9 @@ class slot_conflict_handler:
                     if self.debug:
                         writemsg(
                             (
-                                "%s does not satify all version "
-                                "requirements. Rejecting configuration.\n"
-                            )
-                            % (pkg,),
+                                f"{pkg} does not satify all version "
+                                f"requirements. Rejecting configuration.\n"
+                            ),
                             noiselevel=-1,
                         )
                     return False
@@ -874,10 +872,9 @@ class slot_conflict_handler:
                     if self.debug:
                         writemsg(
                             (
-                                "%s misses needed flags from IUSE."
-                                " Rejecting configuration.\n"
-                            )
-                            % (pkg,),
+                                f"{pkg} misses needed flags from IUSE."
+                                f" Rejecting configuration.\n"
+                            ),
                             noiselevel=-1,
                         )
                     return False
@@ -912,10 +909,9 @@ class slot_conflict_handler:
                     if self.debug:
                         writemsg(
                             (
-                                "%s: installed package would need USE"
-                                " changes. Rejecting configuration.\n"
-                            )
-                            % (pkg,),
+                                f"{pkg}: installed package would need USE"
+                                f" changes. Rejecting configuration.\n"
+                            ),
                             noiselevel=-1,
                         )
                     return False
@@ -963,9 +959,9 @@ class slot_conflict_handler:
                 if state == "contradiction":
                     if self.debug:
                         writemsg(
-                            "Contradicting requirements found for flag "
-                            + flag
-                            + ". Rejecting configuration.\n",
+                            f"Contradicting requirements found for flag "
+                            f"{flag}"
+                            f". Rejecting configuration.\n",
                             noiselevel=-1,
                         )
                     return False
@@ -1066,7 +1062,7 @@ class slot_conflict_handler:
                         inner_first = False
                     else:
                         msg += ", "
-                    msg += flag + ": %s" % (state,)
+                    msg += f"{flag}: {state}"
                 msg += "}"
             msg += "]\n"
             writemsg(msg, noiselevel=-1)
@@ -1188,10 +1184,9 @@ class slot_conflict_handler:
                     if self.debug:
                         writemsg(
                             (
-                                "new conflict introduced: %s"
-                                " does not match %s from %s\n"
-                            )
-                            % (pkg, new_atom, ppkg),
+                                f"new conflict introduced: {pkg}"
+                                f" does not match {new_atom} from {ppkg}\n"
+                            ),
                             noiselevel=-1,
                         )
                     break
